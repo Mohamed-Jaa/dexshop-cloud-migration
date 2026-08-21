@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  dexshop-postgres:
+    image: postgres:15-alpine
+    container_name: dexshop-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: dexuser
+      POSTGRES_PASSWORD: dexpassword
+      POSTGRES_DB: dexshop_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - dex-network
+
+  dexshop-app:
+    build: .
+    container_name: dexshop-app
+    restart: always
+    depends_on:
+      - dexshop-postgres
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=production_secure_secret_key_change_in_prod
+      - DATABASE_URL=postgresql://dexuser:dexpassword@dexshop-postgres:5432/dexshop_db
+    volumes:
+      - ./static/uploads:/app/static/uploads
+    networks:
+      - dex-network
+
+networks:
+  dex-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
