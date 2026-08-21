@@ -1,0 +1,29 @@
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Environment files and credentials (CRITICAL SECURITY)
+.env
+.env.*
+*.pem
+*.key
+
+# Git metadata
+.git
+.gitignore
+
+# Python byte-code and caches
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+# Local databases and SQLite files
+*.db
+*.sqlite3
+
+# OS metadata
+.DS_Store
+Thumbs.db

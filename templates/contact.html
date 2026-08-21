@@ -1,0 +1,87 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+<div class="contact-page-wrapper">
+    <div class="container">
+        
+        <div class="contact-header">
+            <h1>Get in Touch</h1>
+            <p>Have a question about our products or need support? We're here to help.</p>
+        </div>
+
+        <div class="contact-grid">
+            
+            <div class="contact-info-card">
+                <h3>Contact Information</h3>
+                <p class="info-text">Fill up the form and our Team will get back to you within 24 hours.</p>
+                
+                <div class="info-item">
+                    <i class="bi bi-geo-alt-fill"></i>
+                    <div>
+                        <h4>Our Store</h4>
+                        <p>123 Tech Street, Digital City, Morocco</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="bi bi-envelope-fill"></i>
+                    <div>
+                        <h4>Email Us</h4>
+                        <p>support@dexshop.com</p>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <i class="bi bi-telephone-fill"></i>
+                    <div>
+                        <h4>Call Us</h4>
+                        <p>+212 6 12 34 56 78</p>
+                    </div>
+                </div>
+
+                <div class="social-icons">
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-twitter-x"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                </div>
+            </div>
+
+            <div class="contact-form-card">
+                <form action="{{ url_for('contact') }}" method="POST">
+                    
+                    <div class="input-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" name="name" class="box" required placeholder="Enter your full name">
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" name="email" class="box" required placeholder="Email@example.com">
+                    </div>
+
+                    <div class="input-group">
+                        <label>Subject</label>
+                        <select name="subject" class="box">
+                            <option value="support">Technical Support</option>
+                            <option value="sales">Sales Inquiry</option>
+                            <option value="order">Order Status</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Message</label>
+                        <textarea name="message" class="box" rows="5" required placeholder="How can we help you?"></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-store btn-store-primary btn-store-block btn-submit"><a href="{{ url_for('index')}}">Send Message</a></button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

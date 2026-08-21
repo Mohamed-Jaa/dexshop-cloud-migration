@@ -1,0 +1,104 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% if product %}
+<div class="pro-product-page">
+    
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="{{ url_for('main') }}">Home</a> / 
+            <a href="{{ url_for('index', page=1) }}">Products</a> / 
+            <span class="current">{{ product.name }}</span>
+        </div>
+    </div>
+
+    <div class="container main-grid">
+        
+        <div class="visual-column">
+            <div class="image-wrapper">
+                <img src="{{ product.image_url }}" alt="{{ product.name }}" id="mainImage">
+                <div class="glow-effect"></div> </div>
+        </div>
+
+        <div class="info-column">
+            
+            <div class="product-header">
+                <span class="badge {{ product.condition|lower }}">{{ product.condition }}</span>
+                <h1>{{ product.name }}</h1>
+            </div>
+
+            <div class="product-price">
+                <span class="currency">$</span>
+                <span class="amount">{{ product.price_usd | replace(' USD', '') }}</span>
+                <span class="unit">USD</span>
+            </div>
+
+            <p class="short-desc">{{ product.description }}</p>
+
+            <div class="action-buttons">
+                <button type="button" class="btn-store btn-store-cart add-to-cart-btn"
+                    onclick="addToCart(this)" 
+                    data-id="{{ product.id }}" 
+                    data-name="{{ product.name }}" 
+                    data-price="{{ product.price_usd }}" 
+                    data-image="{{ product.image_url }}">
+                    Add to Cart & Checkout 
+                    <i class="bi bi-cart-plus"></i>
+                </button>
+            </div>
+
+            <div class="tech-specs-container">
+                <h3 class="specs-title">Technical Highlights</h3>
+                <div class="specs-grid">
+                    {% for spec in product.specifications %}
+                    <div class="spec-item">
+                        {% if loop.index == 1 %}
+                            <i class="bi bi-cpu"></i>
+                        {% elif loop.index == 2 %}
+                            <i class="bi bi-gpu-card"></i>
+                        {% elif loop.index == 3 %}
+                            <i class="bi bi-memory"></i>
+                        {% elif loop.index == 4 %}
+                            <i class="bi bi-display"></i>
+                        {% else %}
+                            <i class="bi bi-gear-wide-connected"></i>
+                        {% endif %}
+                        <div>
+                            <strong>{{ spec.spec_title }}</strong>
+                            <span>{{ spec.specification }}</span>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="text-muted">No technical specifications available for this product.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="related-section container">
+        <h2 class="related-title">You Might Also Like</h2>
+        <div class="container-pc">
+            {% for item in related_products %}
+            <div class="product-card">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <h3>{{ item.name }}</h3>
+                <p class="price">{{ item.price_usd }}</p>
+                <a href="{{ url_for('product', product_id=item.id) }}" class="btn-store btn-store-outline">View</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% else %}
+<div class="container error-container">
+    <h2>Product Not Found</h2>
+    <a href="{{ url_for('index', page=1) }}" class="btn-store btn-store-primary">Back to Store</a>
+</div>
+{% endif %}
+
+{% endblock %}

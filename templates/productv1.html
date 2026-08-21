@@ -1,0 +1,104 @@
+{% extends 'main.html' %}
+    {% block content %}
+        <div class="main">
+            <section>
+                <div class="product-container">
+                    <img src={{ product.image_url}} alt="{{product.name}}">
+                    <h2>{{product.name}}</h2>
+                    <p>{{product.description}}</p>
+                    <div class="price">
+                        <p>{{product.price_usd}}</p>
+                        <button type="button" onclick="openSidebar(this)"
+                            data-id="{{ product.id }}"
+                            data-name="{{ product.name }}"
+                            data-price="{{ product.price_usd }}"
+                            data-image="{{ product.image_url }}">
+                            Buy Now
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <section class="section-box">
+                <div class="product-card-right">
+                    <h2>{{product.name}}</h2>
+                    <h3>Description</h3>
+                    <p class="title">
+                        {{product.spec_title_1}}
+                    </p>
+                    <p>
+                        {{product.specification_1}}
+                    </p>
+                    <p class="title">
+                        {{product.spec_title_2}}
+                    </p>
+                    <p>
+                        {{product.specification_2}}
+                    </p>
+                    <p class="title">
+                        {{product.spec_title_3}}
+                    </p>
+                    <p>
+                        {{product.specification_3}}
+                    </p>
+                    <p class="title">
+                        {{product.spec_title_4}}
+                    </p>
+                    <p>
+                        {{product.specification_4}}
+                    </p>
+                </div>
+                <div class="card-livreson">
+                    <h2>Livraison et Retours</h2>
+                    <p class="title">
+                        Dans quelles villes faites-vous la livraison ?
+                    </p>
+                    <ul>
+                        <li><p>
+                        Nous livrons partout au Maroc ( Casa, Marrakech, Casablanca, Rabat, Sale, Fès, Tanger, Tétouan,beni melal , Tiznit , kenitra , Nador , Oujda, Dakhla, Agadir, El-Jadida, Essaouira , Safi, Tanger…… ) via Sapres.
+                    </p></li>
+                    </ul>
+                    <p class="title">
+                        Quel est le délai de l'expédition de la commande ?
+                    </p>
+                    <p>
+                        <ul>
+                            <li><p>
+                        Après validation de votre commande (étapes de validation de votre commande ?), elle est tout de suite prise en charge par notre équipe. Ensuite, votre commande sera expédiée soit le jour même, soit le lendemain
+                    </p> </li>
+                </ul>
+                </p>
+                    <p class="title">
+                        Quel est le prix de la livraison ?
+                    </p>
+                    <p>
+                        <ul>
+                            <li>Les frais de livraison sont gratuits pour toute commande dont le montant total dépasse 1500 dirhams.</li>
+                            <li>Les frais de livraison sont à partir de 35 dirhams selon le montant total de votre commande.</li>
+                        </ul>
+                    </p>
+                    <p class="title">
+                        Je souhaite retourner un article, que dois-je faire ?
+                    </p>
+                    <p>
+                        <ul>
+                            <li>Nous vous invitons à (consulter la page sur les retours et remboursements) ou de contacter notre service client.</li>
+                        </ul>
+                    </p>
+                </div>
+            </section>
+        </div>
+        <div class="container" style="margin-top: 80px; border-top: 1px solid #334155; padding-top: 40px;">
+        <h2 class="section-title" style="text-align: left; font-size: 1.8rem;">You Might Also Like</h2>
+        
+        <div class="container-pc">
+            {% for item in related_products %}
+            <div class="product-card">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <h3>{{ item.name }}</h3>
+                <p class="price">{{ item.price_usd }}</p>
+                <a href="{{ url_for('product', product_id=item.id) }}" class="btn-store btn-store-outline">View Details</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endblock %}

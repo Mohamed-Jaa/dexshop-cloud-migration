@@ -1,0 +1,38 @@
+[
+    {
+        "username": "werkzeug",
+        "email": "werkzeug@werkzeug",
+        "password": "scrypt:32768:8:1$9Sa7VkJjULMQmxux$05f77333d360e652ad22eb9f5276095619c3e3728a02dd4b7df2020cace90217bf2bc89224b096ac8dd17a913ef7c1dbbdee1d2cfa74d42c98bb40089ec3a607",
+        "role": "user"
+    },
+    {
+        "username": "tre@qa",
+        "email": "tre@qa",
+        "password": "scrypt:32768:8:1$POyQvG0YCdNYcUPP$2622640f84ee7a14706b952a464c771e649e92b127d4d13d7b8142bcb631e02972fe4ee72a43a61b918bac4fdea3a5dfcdb7d491b012246a9fbd401a72d4daa1",
+        "role": "user"
+    },
+    {
+        "username": "user",
+        "email": "user@user",
+        "password": "scrypt:32768:8:1$KWkbUyibe2JPQFpp$869b4631f745a261a08030063177be47b7b929aa812b3528c145e25c7426e189ab2ba38150c8e3801e672c9ffe314fcdd6f68a736d3f9fa14c3ed4853e019933",
+        "role": "Admin"
+    },
+    {
+        "username": "mohamed",
+        "email": "mohamed@mo",
+        "password": "scrypt:32768:8:1$4a2xzFFEZbSCrknA$fdd8b8ccf900a374df21011fa5907869553a6dd2a846db39f3bf1d850407c5685bb13752f83b3aedf8dbe6c729836fe5ae65ba5d8df9566bb08fac83fd6a1c4c",
+        "role": "admin"
+    },
+    {
+        "username": "mohamed",
+        "email": "mhd@gm",
+        "password": "scrypt:32768:8:1$7bm57z98QYwf0wUY$ef42ab3b2f9f9fde3c74bbb65c63ce0ebb373850ed9c0e40ab12bc46cf6b6766fcbd13353b910693a26843fed62f78c86dc12ebd2826eb900ec7855679cbd922",
+        "role": "user"
+    },
+    {
+        "username": "test",
+        "email": "test@test",
+        "password": "scrypt:32768:8:1$ZyUSIricnc2i527u$0e5c6ddf4b06342341dea84159f98013e036f0d6cb95600de463c975584b0a2678f02d4abde780e18840cf2fcb1229f14025eb7cc43aad0a66f22f537a31e0c8",
+        "role": "user"
+    }
+]

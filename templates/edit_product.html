@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<div class="container py-4" style="max-width: 800px;">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="fw-bold mb-0">Edit Product: {{ product.name }}</h3>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-outline-secondary btn-sm">Back to Dashboard</a>
+    </div>
+
+    <div class="card border-0 shadow-sm p-4 rounded-3 bg-white">
+        <form method="POST" enctype="multipart/form-data">
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Product Name</label>
+                    <input type="text" name="name" class="form-control" value="{{ product.name }}" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Price (USD)</label>
+                    <input type="text" name="price_usd" class="form-control" value="{{ product.price_usd }}" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label fw-semibold">Stock Quantity</label>
+                    <input type="number" name="stock" class="form-control" value="{{ product.stock }}" min="0" required>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Condition</label>
+                    <select name="condition" class="form-select">
+                        <option value="New" {% if product.condition == 'New' %}selected{% endif %}>New</option>
+                        <option value="Refurbished" {% if product.condition == 'Refurbished' %}selected{% endif %}>Refurbished</option>
+                        <option value="Used" {% if product.condition == 'Used' %}selected{% endif %}>Used</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold">Change Image (Optional)</label>
+                    <input type="file" name="image" class="form-control" accept="image/*">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label fw-semibold">Description</label>
+                <textarea name="description" class="form-control" rows="3" required>{{ product.description }}</textarea>
+            </div>
+
+            <h6 class="fw-bold mt-4 mb-3"><i class="bi bi-cpu"></i> Specifications</h6>
+            {% for i in range(1, 5) %}
+                {% set spec = product.specifications[i-1] if product.specifications|length >= i else None %}
+                <div class="row g-2 mb-2">
+                    <div class="col-md-4">
+                        <input type="text" name="spec_title_{{ i }}" class="form-control form-control-sm" placeholder="Spec Title {{ i }}" value="{{ spec.spec_title if spec else '' }}">
+                    </div>
+                    <div class="col-md-8">
+                        <input type="text" name="spec_desc_{{ i }}" class="form-control form-control-sm" placeholder="Detail {{ i }}" value="{{ spec.specification if spec else '' }}">
+                    </div>
+                </div>
+            {% endfor %}
+
+            <div class="d-flex justify-content-between mt-4">
+                <a href="{{ url_for('dashboard') }}" class="btn btn-light">Cancel</a>
+                <button type="submit" class="btn btn-primary fw-semibold">Update Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

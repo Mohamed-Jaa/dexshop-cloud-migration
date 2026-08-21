@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+    {% block content %}
+        <div class="form-container">
+            <form action="{{url_for('register')}}" method="POST"  class="register">
+                <h3>Register now</h3>
+                <input type="text" name="name" placeholder="Enter your full name" class="box" required>
+                <input type="username" name="username" placeholder="Enter your username" class="box" required>
+                <input type="email" name="email" placeholder="Enter your email" class="box" required>
+                <input type="password" name="password" placeholder="Enter your password" class="box" required>
+                <input type="password" name="cpassword" placeholder="Confirm your password" class="box" required>
+                <input type="submit" value="Register now" class="btn btn-store btn-store-primary btn-store-block">
+                <p>Already have an account? <a href="{{ url_for('login')}}">Login Now</a></p>
+            </form>
+        </div>
+    {%endblock%}

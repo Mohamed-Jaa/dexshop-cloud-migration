@@ -1,0 +1,20 @@
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Environment Variables & Secrets
+.env
+*.env.local
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# SQLite local database 
+*.db
+*.sqlite3
+
+# Flask-Migrate local versions 
+instance/

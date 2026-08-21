@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='test.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DexShop</title>
+    <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.jpg')}}" type="image/x-icon">
+</head>
+
+<body>
+    <!--start  header -->
+    <header class="site-header">
+        <div class="container">
+            <a href="{{url_for('main')}}" class="logo"> 
+                <img src="{{ url_for('static', filename='images/logo-icon.jpg') }}" alt="logo for site" class="icon">
+                <h2><span class="dex">DEX</span>
+                    <span class="shop">SHOP</span>
+                </h2>
+            </a>
+            <nav class="site-nav">
+                <span class="menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+                <ul>
+    {% if session.get('user') %}
+        <li class="user-profile-li">
+            <div class="user-badge">
+                <i class="bi bi-person-circle profile-icon"></i>
+                <span class="username-text">Hi, {{ session['user']['username'] }}</span>
+            </div>
+        </li>
+    {% endif %}
+
+    <li><a href="{{ url_for('main') }}">Home</a></li>
+    <li><a href="{{ url_for('index', page=1) }}">Products</a></li>
+    <li><a href="{{ url_for('contact') }}">Contact</a></li>
+    {% if session.get('admin') %}
+        <li><a href="{{ url_for('dashboard') }}">Admin</a></li>
+    {% endif %}
+    {% if session.get('user') %}
+        <li><a href="{{ url_for('logout') }}" class="logout-link">Logout</a></li>
+    {% else %}
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        <li><a href="{{ url_for('register') }}">Sign Up</a></li>
+    {% endif %}
+            </ul>
+            </nav>
+        </div>
+    </header>
+    <!--end header -->
+    <main>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="container flash-container">
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">
+                        <i class="bi bi-info-circle-fill"></i> {{ message }}
+                    </div>
+                {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- start main content -->
+        {%block content%}
+        <section class="hero">
+        <div class="hero-content">
+        <h1>Welcome to DexShop</h1>
+        <p>Your ultimate destination for high-performance laptops and gaming gear. We combine quality, speed, and reliability to power your dreams.</p>
+        <a href="{{ url_for('index', page=1)}}" class="btn-store btn-store-primary btn-store-pill">Shop Now</a>
+    </div>
+        </section>
+        <section class="featured-products container">
+            <h2 class="section-title">Top Featured Laptops</h2>
+            <div class="container-pc">
+                {% for product in featured_products %}
+                <div class="product-card">
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}">
+                    <h3>{{ product.name }}</h3>
+                    <p>{{ product.description | truncate(80) }}</p>
+                    <p class="price">{{ product.price_usd }}</p>
+                    <a href="{{ url_for('product', product_id=product.id) }}" class="btn-store btn-store-outline">View Details</a>
+                </div>
+                {% else %}
+                    <p style="text-align: center; margin-top: 50px;" class="no-available">No featured products available.</p>
+                {% endfor %}
+            </div>
+
+            <div class="btn-view-all">
+                <a href="{{ url_for('index', page=1) }}" class="btn-store btn-store-secondary">View All Products &rarr;</a>
+            </div>
+        </section>
+        <section class="features-section container">
+    <div class="features-grid">
+        <div class="feature-item">
+            <i class="bi bi-truck feature-icon"></i>
+            <h3>Fast Delivery</h3>
+            <p>Free shipping on all orders over $1500. Delivered in 48h.</p>
+        </div>
+        <div class="feature-item">
+            <i class="bi bi-shield-check feature-icon"></i>
+            <h3>Secure Payment</h3>
+            <p>100% secure payment with encrypted transactions.</p>
+        </div>
+        <div class="feature-item">
+            <i class="bi bi-headset feature-icon"></i>
+            <h3>24/7 Support</h3>
+            <p>Our experts are here to help you choose the best gear.</p>
+        </div>
+        <div class="feature-item">
+            <i class="bi bi-arrow-counterclockwise feature-icon"></i>
+            <h3>30 Days Return</h3>
+            <p>Not satisfied? Return it within 30 days for an exchange.</p>
+        </div>
+    </div>
+</section>
+<section class="testimonials-section">
+    <div class="container">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <div class="testimonials-grid">
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"The MacBook Air M2 I bought is fantastic! Fast shipping and excellent packaging. Highly recommended."</p>
+                <h4> Sarah jinan</h4>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★★</div>
+                <p>"Great customer service. They helped me choose the perfect gaming laptop for my budget."</p>
+                <h4> Mohamed-J</h4>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars">★★★★☆</div>
+                <p>"Best prices for refurbished laptops. My Dell XPS works like new. Will buy again!"</p>
+                <h4> Amine Said</h4>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="promo-banner container">
+    <div class="promo-content">
+        <h2>Gaming Gear Sale</h2>
+        <p>Up to 20% OFF on selected Gaming Laptops this week only.</p>
+        <a href="{{ url_for('index', page=1) }}" class="btn-animated">Check Offers &rarr;</a>
+    </div>
+</section>
+        {%endblock%}
+        <!-- end main content -->
+        <button onclick="topFunction()" id="scrollTopBtn" title="Go to top">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </main>
+    <!-- check out sidebar and basket -->
+    <!-- check out sidebar and basket -->
+<div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
+
+<div class="checkout-sidebar" id="sidebar">
+    <!-- رأس النافذة (أيقونة الإغلاق فقط في اليسار) -->
+    <div class="sidebar-header">
+        <span class="close-btn" onclick="closeSidebar()">&times;</span>
+    </div>
+    
+    <!-- عنوان السلة (نص عادي) -->
+    <h3 class="cart-title">Your Shopping Cart</h3>
+    
+    <!-- محتوى السلة -->
+    <div class="sidebar-content" id="cart-items-container">
+        <!-- سيتم ملؤه بالجافاسكريبت -->
+    </div>
+
+    <!-- تذييل النافذة (السعر الكلي + نموذج الطلب) -->
+    <div class="sidebar-footer-form">
+        <!-- السعر الكلي -->
+        <div class="summary-totals">
+            <p class="total-line">Total: <span id="finalTotal">0.00 USD</span></p>
+        </div>
+        
+        <!-- نموذج الطلب -->
+        <form id="checkoutForm" onsubmit="submitOrder(event)">
+            <h4 class="form-title">Customer Information</h4>
+            <input type="text" id="customerName" required placeholder="Full Name" class="form-input">
+            <input type="tel" id="customerPhone" required placeholder="Phone Number" class="form-input">
+            <input type="text" id="customerAddress" required placeholder="Shipping Address" class="form-input">
+            
+            <button type="submit" class="submit-btn">
+                <i class="bi bi-send-check"></i> Confirm Order
+            </button>
+        </form>
+    </div>
+</div>
+    <footer>
+        <p>&copy; 2024 DexShop. All rights reserved.</p>
+    </footer>
+    <div class="floating-cart" onclick="openSidebar()">
+        <i class="bi bi-cart-fill"></i>
+        <span id="cart-count">0</span>
+    </div>
+    <!-- Bootstrap 5 JS Bundle (ضروري لعمل التبويبات والقوائم المنسدلة) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

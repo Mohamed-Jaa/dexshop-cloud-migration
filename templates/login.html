@@ -1,0 +1,12 @@
+{% extends 'main.html' %}
+{% block content %}
+        <div class="form-container">
+                <form action="{{url_for('login')}}" method="POST"  class="login">
+                        <h3>Login now</h3>
+                        <input type="email" name="email" placeholder="Enter your email" class="box" required>
+                        <input type="password" name="password" placeholder="Enter your password" class="box" required>
+                        <input type="submit" value="Login now" class="btn btn-store btn-store-primary btn-store-block">
+                        <p>D'ont have an account? <a href="{{ url_for('register')}}">Register</a></p>
+                </form>
+        </div>
+{%endblock%}
