@@ -316,3 +316,31 @@ jobs:
           tags: |
             ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:${{ github.sha }}
+
+            # المرحلة 14: النشر والتحديث التلقائي على خادم AWS EC2
+  deploy-to-ec2:
+    name: 14. Deploy to AWS EC2
+    runs-on: ubuntu-latest
+    needs: deploy-image
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Deploy via SSH to EC2
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # 1. تسجيل الدخول وسحب أحدث صورة تم بناؤها
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:latest
+
+            # 2. إيقاف وإزالة الحاوية القديمة إن وجدت
+            docker stop dexshop-live || true
+            docker rm dexshop-live || true
+
+            # 3. تشغيل الحاوية الجديدة بالمنفذ 80 (أو 5000 حسب إعداد السيرفر)
+            docker run -d --name dexshop-live --restart always -p 80:5000 ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:latest
+
+            # 4. تنظيف الصور القديمة لتوفير المساحة
+            docker image prune -af
