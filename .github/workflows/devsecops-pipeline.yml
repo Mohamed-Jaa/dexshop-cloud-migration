@@ -239,3 +239,24 @@ jobs:
           cosign generate-key-pair
           cosign sign-blob --key cosign.key --tlog-upload=false --yes --output-signature image.sig image.tar
           cosign verify-blob --key cosign.pub --signature image.sig --insecure-ignore-tlog=true image.tar
+
+          # المرحلة 11: فرض السياسات ككود (Policy as Code with Conftest)
+  policy-check:
+    name: 11. Policy as Code (Conftest)
+    runs-on: ubuntu-latest
+    needs: image-signing
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Conftest
+        run: |
+          CONFTEST_VERSION="0.56.0"
+          wget "https://github.com/open-policy-agent/conftest/releases/download/v${CONFTEST_VERSION}/conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz"
+          tar xzf "conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz"
+          sudo mv conftest /usr/local/bin/
+          rm "conftest_${CONFTEST_VERSION}_Linux_x86_64.tar.gz"
+
+      - name: Run Conftest against Dockerfile
+        run: |
+          conftest test Dockerfile -p policy/ --parser dockerfile
