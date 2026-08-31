@@ -159,3 +159,32 @@ jobs:
           ignore-unfixed: true
           vuln-type: "os,library"
           severity: "CRITICAL"
+
+          # المرحلة 8: توليد قائمة مكونات البرمجيات (SBOM Generation)
+  sbom-generation:
+    name: 8. SBOM Generation (Syft)
+    runs-on: ubuntu-latest
+    needs: container-scan
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker Image
+        run: |
+          docker build -t dexshop-app:local .
+
+      - name: Generate SBOM with Syft
+        uses: anchore/sbom-action@v0
+        with:
+          image: dexshop-app:local
+          format: spdx-json
+          output-file: dexshop-sbom.spdx.json
+
+      - name: Upload SBOM Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom-artifact
+          path: dexshop-sbom.spdx.json
