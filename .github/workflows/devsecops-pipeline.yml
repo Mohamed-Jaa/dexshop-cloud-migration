@@ -91,3 +91,18 @@ jobs:
       - name: Run Dependency Vulnerability Scan
         run: |
           pip-audit -r requirements.txt
+
+# المرحلة 5: فحص ملفات البنية التحتية (Dockerfile Linting)
+    iac-scan:
+      name: 5. IaC Scan (Hadolint)
+      runs-on: ubuntu-latest
+      needs: sca-scan
+      steps:
+        - name: Checkout Code
+          uses: actions/checkout@v4
+
+        - name: Run Hadolint Dockerfile Linter
+          uses: hadolint/hadolint-action@v3.1.0
+          with:
+            dockerfile: Dockerfile
+            failure-threshold: error
