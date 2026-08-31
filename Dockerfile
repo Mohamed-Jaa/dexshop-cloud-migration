@@ -6,7 +6,7 @@ FROM python:3.12-slim AS builder
 WORKDIR /build
 
 # Install build-time system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends \
     gcc \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
