@@ -9,6 +9,7 @@ def seed_database():
     while preserving existing relationships and data integrity.
     """
     with app.app_context():
+        db.create_all()  # Ensure tables are created before seeding data
         # 1. Migrate Users
         users_file = 'users.json'
         if os.path.exists(users_file):

@@ -317,7 +317,7 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:latest
             ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:${{ github.sha }}
 
-  # المرحلة 14: التحديث التلقائي على خادم AWS EC2 المتوافق مع Nginx و DuckDNS
+# المرحلة 14: التحديث التلقائي المتوافق مع بيئة Docker Compose و Nginx
   deploy-to-ec2:
     name: 14. Deploy to AWS EC2
     runs-on: ubuntu-latest
@@ -331,23 +331,17 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 1. سحب أحدث صورة من Docker Hub
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:latest
             
-            # 2. إيقاف وإزالة الحاوية القديمة
+            # حذف الحاوية المعطلة إن وجدت
             docker stop dexshop-live || true
             docker rm dexshop-live || true
-            
-            # 3. تشغيل الحاوية على المنفذ 5000 المخصص لـ Nginx Reverse Proxy
-            docker run -d --name dexshop-live --restart always \
-              -p 127.0.0.1:5000:5000 \
-              -e FLASK_ENV=production \
-              ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:latest \
-              sh -c "python seed.py && python app.py"
-            
-            # 4. إعادة تحميل Nginx للتأكد من استقرار الاتصال
-            sudo systemctl reload nginx || true
-            
-            # 5. تنظيف الصور القديمة
+
+            # الانتقال لمجلد المشروع وتشغيل التحديث عبر docker-compose
+            cd /home/ubuntu/dexshop-cloud-migration || cd /home/ubuntu/*dexshop* || cd ~/
+            docker compose down app || docker-compose down app || true
+            docker tag ${{ secrets.DOCKERHUB_USERNAME }}/dexshop-app:latest dexshop-cloud-migration-dexshop-app:latest
+            docker compose up -d || docker-compose up -d
+
             docker image prune -af
