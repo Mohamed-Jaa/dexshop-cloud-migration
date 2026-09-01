@@ -25,6 +25,7 @@ services:
     environment:
       - SECRET_KEY=production_secure_secret_key_change_in_prod
       - DATABASE_URL=postgresql://dexuser:dexpassword@dexshop-postgres:5432/dexshop_db
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     volumes:
       - ./static/uploads:/app/static/uploads
     networks:
