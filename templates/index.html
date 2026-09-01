@@ -1,12 +1,15 @@
 {% extends 'main.html' %}
 {%block content%}
-        <h1 class="big-title">Welcome to our Store</h1>
+        <div class="container" style="padding-top: 2rem;">
+            <h1 class="big-title" style="padding-top:0;">All Products</h1>
+            <p style="color: var(--text-muted); margin-top: -0.75rem; margin-bottom: 1.5rem;">Browse our full catalog of laptops and gaming gear.</p>
+        </div>
         <div class="container-pc products-grid">
         {%for product in products%}
         <div class="product-card">
             <img src="{{product.image_url}}" alt="{{product.name}}">
             <h3>{{product.name}}</h3>
-            <p class="description">{{ product.description | truncate(80) }}</p>  <!-- ← modifié ici -->
+            <p class="description">{{ product.description | truncate(80) }}</p>
             <p class="price">{{product.price_usd}}</p>
             <p class="{{product.condition|lower}} condition-badge">{{product.condition}}</p>
             <a href="{{ url_for('product', product_id=product.id)}}" class="btn-store btn-store-outline">View Details</a>
@@ -21,13 +24,15 @@
             </button>
             <div class="card-actions"></div>
         </div>
+        {% else %}
+            <p style="text-align: center; margin-top: 50px;" class="no-available">No products available yet.</p>
         {%endfor%}
         </div>
-        <!-- end main content -->
         <!-- start lien de other page -->
+        {% if total_pages and total_pages > 1 %}
         <div class="lien-other-page">
             {%if current_page >1%}
-            <a href={{ url_for('index', page=current_page-1)}} class="naviger">previous</a>
+            <a href={{ url_for('index', page=current_page-1)}} class="naviger">Previous</a>
             {%endif%}
         {%for p in range(1,total_pages+1)%}
             {%if p == current_page%}
@@ -37,93 +42,9 @@
             {%endif%}
         {%endfor%}
             {%if current_page < total_pages%}
-            <a href={{ url_for('index', page=current_page+1)}} class="naviger">next</a>
+            <a href={{ url_for('index', page=current_page+1)}} class="naviger">Next</a>
             {%endif%}
         </div>
+        {% endif %}
         <!-- end lien de other page -->
-        <!-- start about -->
-        <div class="about-us">
-            <h1 class="big-title">About Us</h1>
-            <p>At our store, we are passionate about providing high-quality products and exceptional customer service.
-                Our
-                team is dedicated to ensuring that you find the perfect computer for your needs, whether you're a
-                student, a professional, or a gamer.</p>
-        </div>
-
-        <div class="about">
-            <div class="card card-surface">
-                <img src="../static/images/delivery-van.png" alt="delivery">
-                <h3>Free Delivery</h3>
-                <p>your command prepare and camming for you</p>
-            </div>
-            <div class="card card-surface">
-                <img src="../static/images/guarantee-certificate.png" alt="guarantee">
-                <h3>Satisfaction guarantee</h3>
-                <p>Always there to ensure you are satisfied with your purchases</p>
-            </div>
-            <div class="card card-surface">
-                <img src="../static/images/customer-service.png" alt="customer service">
-                <h3>Assistance client</h3>
-                <p>We are at your service all week</p>
-            </div>
-            <div class="card card-surface">
-                <img src="../static/images/credit-card.png" alt="secure payment">
-                <h3>Secure payment</h3>
-                <p>All the payment methods offered are secure.</p>
-            </div>
-        </div>
-        <!-- end about -->
-        <!-- start contact -->
-        <div class="contact-head">
-            <h1 class="big-title">Contact Us</h1>
-            <p>Have any questions or feedback? We'd love to hear from you!</p>
-        </div>
-        <div class="contact">
-            <div class="col">
-                <h2>Contact Information</h2>
-                <p>Address: 123 Main Street, City</p>
-                <p>Phone: +1 (123) 456-7890</p>
-                <p><a href="mailto:support@gmail.com">Email:support@gmail.com</a></p>
-                <p><a href="mailto:info@gmail.com">Email:info@gmail.com</a></p>
-                <p><a href="mailto:sales@gmail.com">Email:sales@gmail.com</a></p>
-            </div>
-            <div class="col">
-                <h2>Opening Hours</h2>
-                <p>Monday - Friday: 9am - 5pm</p>
-                <p>Saturday: 10am - 4pm</p>
-                <p>Sunday: Closed</p>
-            </div>
-            <div class="col">
-                <h2>Follow Us</h2>
-                <ul>
-                    <li><a href="#"><i class="bi bi-facebook"></i>Facebook</a></li>
-                    <li><a href="#"><i class="bi bi-twitter"></i>Twitter</a></li>
-                    <li><a href="#"><i class="bi bi-instagram"></i>Instagram</a></li>
-                    <li><a href="#"><i class="bi bi-linkedin"></i>Linkdin</a></li>
-                    <li><a href="#"><i class="bi bi-github"></i>GitHub</a></li>
-                </ul>
-            </div>
-            <div class="col">
-                <h2>Collections Populaires</h2>
-                <ul>
-                    <li><a href="#">Laptops</a></li>
-                    <li><a href="#">Desktops</a></li>
-                    <li><a href="#">Smartphones</a></li>
-                    <li><a href="#">Tablets</a></li>
-                    <li><a href="#">Accessories</a></li>
-                </ul>
-            </div>
-            <div class="col">
-                <h2>Let Us Help You</h2>
-                <ul>
-                    <li><a href="#">Shipping Information</a></li>
-                    <li><a href="#">Returns & Refunds</a></li>
-                    <li><a href="#">FAQs</a></li>
-                    <li><a href="#">Terms & Conditions</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Help</a></li>
-                </ul>
-            </div>
-        </div>
-        <!-- end contact -->
         {% endblock %}

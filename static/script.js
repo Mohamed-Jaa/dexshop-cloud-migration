@@ -1,3 +1,29 @@
+/* --- MOBILE NAVIGATION --- */
+function initMobileNav() {
+  const toggle = document.querySelector(".nav-toggle");
+  const navList = document.querySelector(".site-nav ul");
+  const scrim = document.querySelector(".nav-scrim");
+  if (!toggle || !navList) return;
+
+  function closeNav() {
+    navList.classList.remove("open");
+    if (scrim) scrim.classList.remove("open");
+    toggle.setAttribute("aria-expanded", "false");
+  }
+
+  function toggleNav() {
+    const isOpen = navList.classList.toggle("open");
+    if (scrim) scrim.classList.toggle("open", isOpen);
+    toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+  }
+
+  toggle.addEventListener("click", toggleNav);
+  if (scrim) scrim.addEventListener("click", closeNav);
+  navList.querySelectorAll("a").forEach((link) => link.addEventListener("click", closeNav));
+}
+
+document.addEventListener("DOMContentLoaded", initMobileNav);
+
 /* --- SHOPPING CART SYSTEM --- */
 
 let cart = JSON.parse(localStorage.getItem("dexshop_cart")) || [];

@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="stylesheet" href="{{url_for('static', filename='test.css')}}" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DexShop</title>
+    <meta name="description" content="DexShop — high-performance laptops and gaming gear, delivered fast across Morocco.">
+    <title>DexShop — Laptops & Gaming Gear</title>
     <link rel="shortcut icon" href="{{url_for('static', filename='images/favicon.jpg')}}" type="image/x-icon">
 </head>
 
@@ -23,13 +25,9 @@
                 </h2>
             </a>
             <nav class="site-nav">
-                <span class="menu">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </span>
+                <button type="button" class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+                    <span></span><span></span><span></span>
+                </button>
                 <ul>
     {% if session.get('user') %}
         <li class="user-profile-li">
@@ -55,6 +53,7 @@
             </ul>
             </nav>
         </div>
+        <div class="nav-scrim"></div>
     </header>
     <!--end header -->
     <main>
@@ -74,9 +73,12 @@
         {%block content%}
         <section class="hero">
         <div class="hero-content">
-        <h1>Welcome to DexShop</h1>
-        <p>Your ultimate destination for high-performance laptops and gaming gear. We combine quality, speed, and reliability to power your dreams.</p>
-        <a href="{{ url_for('index', page=1)}}" class="btn-store btn-store-primary btn-store-pill">Shop Now</a>
+        <h1>Power that keeps up with you</h1>
+        <p>High-performance laptops and gaming gear, hand-checked and delivered across Morocco in 48h.</p>
+        <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+            <a href="{{ url_for('index', page=1)}}" class="btn-store btn-store-primary btn-store-pill">Shop Now</a>
+            <a href="{{ url_for('contact') }}" class="btn-store btn-store-pill btn-store-ghost">Talk to Us</a>
+        </div>
     </div>
         </section>
         <section class="featured-products container">
@@ -163,10 +165,10 @@
     <!-- check out sidebar and basket -->
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
 
-<div class="checkout-sidebar" id="sidebar">
-    <!-- رأس النافذة (أيقونة الإغلاق فقط في اليسار) -->
+<div id="sidebar">
     <div class="sidebar-header">
-        <span class="close-btn" onclick="closeSidebar()">&times;</span>
+        <span style="font-weight:600; color:var(--text-muted); font-size:.85rem;">CART</span>
+        <button type="button" class="close-btn" onclick="closeSidebar()" aria-label="Close cart">&times;</button>
     </div>
     
     <!-- عنوان السلة (نص عادي) -->

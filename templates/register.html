@@ -2,7 +2,8 @@
     {% block content %}
         <div class="form-container">
             <form action="{{url_for('register')}}" method="POST"  class="register">
-                <h3>Register now</h3>
+                <i class="bi bi-person-plus" style="font-size:1.8rem; color: var(--accent); display:block; text-align:center; margin-bottom:.5rem;"></i>
+                <h3>Create your account</h3>
                 <input type="text" name="name" placeholder="Enter your full name" class="box" required>
                 <input type="username" name="username" placeholder="Enter your username" class="box" required>
                 <input type="email" name="email" placeholder="Enter your email" class="box" required>

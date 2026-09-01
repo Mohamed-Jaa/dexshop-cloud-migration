@@ -295,24 +295,7 @@ def create_user():
     if not username or not email or not password:
         flash('Username, email, and password are required.', 'error')
         return redirect(url_for('dashboard'))
-
-    existing_user = User.query.filter_by(email=email).first()
-    if existing_user:
-        flash('User with this email already exists.', 'error')
-        return redirect(url_for('dashboard'))
-
-    new_user = User(
-        username=username,
-        email=email,
-        password_hash=generate_password_hash(password),
-        role=role
-    )
-    db.session.add(new_user)
-    db.session.commit()
-    flash(f'User {username} created successfully as {role}.', 'success')
-    return redirect(url_for('dashboard'))
-
-
+  # Ensure tables are created before the first request
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000) # nosec B104

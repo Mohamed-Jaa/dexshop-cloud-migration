@@ -2,7 +2,8 @@
 {% block content %}
         <div class="form-container">
                 <form action="{{url_for('login')}}" method="POST"  class="login">
-                        <h3>Login now</h3>
+                        <i class="bi bi-shield-lock" style="font-size:1.8rem; color: var(--sky); display:block; text-align:center; margin-bottom:.5rem;"></i>
+                        <h3>Welcome back</h3>
                         <input type="email" name="email" placeholder="Enter your email" class="box" required>
                         <input type="password" name="password" placeholder="Enter your password" class="box" required>
                         <input type="submit" value="Login now" class="btn btn-store btn-store-primary btn-store-block">
