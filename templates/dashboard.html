@@ -117,26 +117,31 @@
         <!-- Tab 2: Add Product Form -->
         <div id="add-tab" class="admin-tab-content">
             <div class="admin-form-card">
-                <form method="POST" action="{{ url_for('dashboard') }}" enctype="multipart/form-data">
+                <form id="add-product-form" method="POST" action="{{ url_for('dashboard') }}" enctype="multipart/form-data">
                     <div class="form-row">
                         <div class="form-group flex-2">
                             <label>Product Name</label>
-                            <input type="text" name="name" placeholder="e.g. MacBook Pro 16" required>
+                            <div style="display: flex; gap: 8px; align-items: stretch;">
+                                <input type="text" id="p_name" name="name" placeholder="e.g. MacBook Pro 16" required style="flex: 1;">
+                                <button type="button" id="btn-ai-autofill" style="white-space: nowrap; background: linear-gradient(135deg, #4f46e5, #7c3aed); color: #ffffff; border: none; border-radius: 8px; padding: 0 16px; font-weight: 600; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2); transition: all 0.2s ease;">
+                                    <i class="bi bi-stars"></i> Auto-Fill with AI
+                                </button>
+                            </div>
                         </div>
                         <div class="form-group flex-1">
                             <label>Price (USD)</label>
-                            <input type="text" name="price_usd" placeholder="1999" required>
+                            <input type="text" id="p_price" name="price_usd" placeholder="1999" required>
                         </div>
                         <div class="form-group flex-1">
                             <label>Stock Quantity</label>
-                            <input type="number" name="stock" value="10" min="0" required>
+                            <input type="number" id="p_stock" name="stock" value="10" min="0" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group flex-1">
                             <label>Condition</label>
-                            <select name="condition">
+                            <select id="p_condition" name="condition">
                                 <option value="New">New</option>
                                 <option value="Refurbished">Refurbished</option>
                                 <option value="Used">Used</option>
@@ -144,33 +149,33 @@
                         </div>
                         <div class="form-group flex-1">
                             <label>Product Image</label>
-                            <input type="file" name="image" accept="image/*" required>
+                            <input type="file" id="p_image" name="image" accept="image/*" required>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea name="description" rows="4" placeholder="Full product specifications and details..." required></textarea>
+                        <textarea id="p_desc" name="description" rows="4" placeholder="Full product specifications and details..." required></textarea>
                     </div>
 
                     <h4 class="specs-section-title"><i class="bi bi-cpu"></i> Technical Specifications</h4>
                     
                     <div class="specs-input-grid">
                         <div class="form-row">
-                            <input type="text" name="spec_title_1" class="flex-1" placeholder="Spec 1 (e.g. CPU)" required>
-                            <input type="text" name="spec_desc_1" class="flex-2" placeholder="Value (e.g. Apple M3 Max)" required>
+                            <input type="text" id="spec_title_1" name="spec_title_1" class="flex-1" placeholder="Spec 1 (e.g. CPU)" required>
+                            <input type="text" id="spec_desc_1" name="spec_desc_1" class="flex-2" placeholder="Value (e.g. Apple M3 Max)" required>
                         </div>
                         <div class="form-row">
-                            <input type="text" name="spec_title_2" class="flex-1" placeholder="Spec 2 (e.g. RAM)" required>
-                            <input type="text" name="spec_desc_2" class="flex-2" placeholder="Value (e.g. 36GB Unified)" required>
+                            <input type="text" id="spec_title_2" name="spec_title_2" class="flex-1" placeholder="Spec 2 (e.g. RAM)" required>
+                            <input type="text" id="spec_desc_2" name="spec_desc_2" class="flex-2" placeholder="Value (e.g. 36GB Unified)" required>
                         </div>
                         <div class="form-row">
-                            <input type="text" name="spec_title_3" class="flex-1" placeholder="Spec 3 (e.g. Storage)" required>
-                            <input type="text" name="spec_desc_3" class="flex-2" placeholder="Value (e.g. 1TB SSD)" required>
+                            <input type="text" id="spec_title_3" name="spec_title_3" class="flex-1" placeholder="Spec 3 (e.g. Storage)" required>
+                            <input type="text" id="spec_desc_3" name="spec_desc_3" class="flex-2" placeholder="Value (e.g. 1TB SSD)" required>
                         </div>
                         <div class="form-row">
-                            <input type="text" name="spec_title_4" class="flex-1" placeholder="Spec 4 (e.g. Display)" required>
-                            <input type="text" name="spec_desc_4" class="flex-2" placeholder="Value (e.g. 16.2 Liquid Retina XDR)" required>
+                            <input type="text" id="spec_title_4" name="spec_title_4" class="flex-1" placeholder="Spec 4 (e.g. Display)" required>
+                            <input type="text" id="spec_desc_4" name="spec_desc_4" class="flex-2" placeholder="Value (e.g. 16.2 Liquid Retina XDR)" required>
                         </div>
                     </div>
 
@@ -271,5 +276,63 @@ function switchAdminTab(tabId, el) {
     document.getElementById(tabId).classList.add('active');
     el.classList.add('active');
 }
+
+document.getElementById('btn-ai-autofill').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-ai-autofill');
+    const nameInput = document.getElementById('p_name');
+    const imageInput = document.getElementById('p_image');
+
+    if (!nameInput.value.trim() && !imageInput.files[0]) {
+        alert('Please enter a Product Name or select an Image first!');
+        return;
+    }
+
+    const originalContent = btn.innerHTML;
+    btn.innerHTML = '<i class="bi bi-arrow-repeat spin"></i> Generating...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+
+    const formData = new FormData();
+    formData.append('name', nameInput.value.trim());
+    if (imageInput.files[0]) {
+        formData.append('image', imageInput.files[0]);
+    }
+
+    try {
+        const response = await fetch('/api/ai-autofill', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            if (data.clean_name) document.getElementById('p_name').value = data.clean_name;
+            if (data.description) document.getElementById('p_desc').value = data.description;
+            if (data.price_usd) document.getElementById('p_price').value = data.price_usd;
+            if (data.condition) document.getElementById('p_condition').value = data.condition;
+
+            if (data.specs && Array.isArray(data.specs)) {
+                data.specs.forEach((item, index) => {
+                    const i = index + 1;
+                    if (i <= 4) {
+                        const titleEl = document.getElementById(`spec_title_${i}`);
+                        const descEl = document.getElementById(`spec_desc_${i}`);
+                        if (titleEl && item.title) titleEl.value = item.title;
+                        if (descEl && item.desc) descEl.value = item.desc;
+                    }
+                });
+            }
+        } else {
+            alert(data.error || 'Failed to generate product details.');
+        }
+    } catch (err) {
+        alert('Network error while connecting to AI service.');
+    } finally {
+        btn.innerHTML = originalContent;
+        btn.style.opacity = '1';
+        btn.disabled = false;
+    }
+});
 </script>
 {% endblock %}

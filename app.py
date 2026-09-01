@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import Flask, render_template, url_for, request, redirect, session, flash
+from flask import Flask, render_template, url_for, request, redirect, session, flash , jsonify
 from flask_migrate import Migrate
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -7,6 +7,8 @@ from config import Config
 from models import db, User, Product, ProductSpecification
 
 from utils.storage import upload_file_to_storage
+
+from ai_helper import generate_product_metadata
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -295,7 +297,28 @@ def create_user():
     if not username or not email or not password:
         flash('Username, email, and password are required.', 'error')
         return redirect(url_for('dashboard'))
-  # Ensure tables are created before the first request
+
+@app.route('/api/ai-autofill', methods=['POST'])
+def ai_autofill():
+    product_name = request.form.get('name', '').strip()
+    image_file = request.files.get('image')
+
+    if not product_name and not image_file:
+        return jsonify({'error': 'Please provide at least a product name or image'}), 400
+
+    image_bytes = None
+    mime_type = "image/jpeg"
+
+    if image_file and image_file.filename != '':
+        image_bytes = image_file.read()
+        mime_type = image_file.mimetype or "image/jpeg"
+
+    ai_data = generate_product_metadata(product_name, image_bytes, mime_type)
+
+    if not ai_data:
+        return jsonify({'error': 'AI failed to generate details'}), 500
+
+    return jsonify(ai_data)
 
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=5000) # nosec B104
