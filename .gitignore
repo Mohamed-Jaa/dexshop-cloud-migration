@@ -17,4 +17,4 @@ __pycache__/
 *.sqlite3
 
 # Flask-Migrate local versions 
-instance/
+instance/certbot/
