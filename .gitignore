@@ -18,3 +18,8 @@ __pycache__/
 
 # Flask-Migrate local versions 
 instance/certbot/
+
+certbot/
+backup.sql
+*.sql.gz
+static/uploads/
