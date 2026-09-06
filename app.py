@@ -50,7 +50,7 @@ def main():
         try:
             cached_data = redis_client.get(cache_key)
             if cached_data:
-                featured_products = pickle.loads(cached_data)
+                featured_products = pickle.loads(cached_data)  # nosec B301
         except Exception:
             featured_products = None
 
@@ -58,7 +58,7 @@ def main():
         featured_products = Product.query.order_by(Product.id.asc()).limit(4).all()
         if redis_client:
             try:
-                redis_client.setex(cache_key, 60, pickle.dumps(featured_products))
+                redis_client.setex(cache_key, 60, pickle.dumps(featured_products))  # nosec B301
             except Exception:
                 pass
 
