@@ -1,4 +1,13 @@
+
 services:
+  dexshop-redis:
+    image: redis:alpine
+    container_name: dexshop-redis
+    restart: unless-stopped
+    command: redis-server --maxmemory 64mb --maxmemory-policy allkeys-lru
+    networks:
+      - dex-network
+
   dexshop-app:
     build: .
     container_name: dexshop-app
@@ -7,6 +16,11 @@ services:
       - "5000"
     env_file:
       - .env
+    environment:
+      - REDIS_URL=redis://dexshop-redis:6379/0
+    command: gunicorn --workers 3 --bind 0.0.0.0:5000 app:app
+    depends_on:
+      - dexshop-redis
     networks:
       - dex-network
 

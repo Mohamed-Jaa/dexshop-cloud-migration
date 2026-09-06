@@ -1,3 +1,7 @@
+import os
+import pickle
+import redis
+
 from functools import wraps
 from flask import Flask, render_template, url_for, request, redirect, session, flash , jsonify
 from flask_migrate import Migrate
@@ -18,6 +22,14 @@ db.init_app(app)
 migrate = Migrate(app, db)
 
 
+redis_client = None
+try:
+    redis_url = os.getenv('REDIS_URL', 'redis://dexshop-redis:6379/0')
+    redis_client = redis.from_url(redis_url, socket_timeout=2)
+    redis_client.ping()
+except Exception:
+    redis_client = None
+
 def admin_required(f):
     """
     Decorator to enforce role-based access control for administrative endpoints.
@@ -30,12 +42,27 @@ def admin_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-
 @app.route('/')
 def main():
-    featured_products = Product.query.order_by(Product.id.asc()).limit(4).all()
-    return render_template('main.html', featured_products=featured_products)
+    cache_key = 'featured_products'
+    featured_products = None
+    if redis_client:
+        try:
+            cached_data = redis_client.get(cache_key)
+            if cached_data:
+                featured_products = pickle.loads(cached_data)
+        except Exception:
+            featured_products = None
 
+    if featured_products is None:
+        featured_products = Product.query.order_by(Product.id.asc()).limit(4).all()
+        if redis_client:
+            try:
+                redis_client.setex(cache_key, 60, pickle.dumps(featured_products))
+            except Exception:
+                pass
+
+    return render_template('main.html', featured_products=featured_products)
 
 @app.route('/index')
 @app.route('/products/<int:page>')
